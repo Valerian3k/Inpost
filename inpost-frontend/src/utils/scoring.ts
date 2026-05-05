@@ -1,12 +1,13 @@
 import type { Locker } from "../types/locker";
 
+// Calculate distance between two coordinates using the Haversine formula (km)
 function getDistance(
   lat1: number,
   lon1: number,
   lat2: number,
   lon2: number
 ) {
-  const R = 6371;
+  const R = 6371; // Earth radius in kilometers
 
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -22,16 +23,21 @@ function getDistance(
   return R * c;
 }
 
+// Compute a ranking score for a locker based on distance and features
 export function scoreLocker(
   locker: Locker,
   userLat: number,
   userLng: number,
   filters: any
 ) {
-  // ❌ filtrowanie twarde
+  // Hard filtering: exclude lockers that do not meet active filters
   if (filters.only247 && locker.opening_hours !== "24/7") return -Infinity;
-  if (filters.sendOnly && !locker.functions.includes("parcel_send")) return -Infinity;
-  if (filters.returnOnly && !locker.functions.includes("parcel_collect")) return -Infinity;
+
+  if (filters.sendOnly && !locker.functions.includes("parcel_send"))
+    return -Infinity;
+
+  if (filters.returnOnly && !locker.functions.includes("parcel_collect"))
+    return -Infinity;
 
   if (
     filters.allegro &&
@@ -40,6 +46,7 @@ export function scoreLocker(
     return -Infinity;
   }
 
+  // Distance from user
   const dist = getDistance(
     userLat,
     userLng,
@@ -47,19 +54,15 @@ export function scoreLocker(
     locker.location.longitude
   );
 
-  // -----------------------------
-  // 1. DISTANCE SCORE (DOMINUJĄCY)
-  // -----------------------------
-  // im bliżej, tym większy score (0–100)
-  const maxDistance = 50; // 50km sensowny cutoff
+  // Distance score (dominant factor)
+  // Closer lockers receive higher scores in range 0–100
+  const maxDistance = 50; // cutoff distance in km
   const distanceScore = Math.max(
     0,
     100 - (dist / maxDistance) * 100
   );
 
-  // -----------------------------
-  // 2. FEATURE SCORE (BONUS)
-  // -----------------------------
+  // Feature-based bonus score
   let featureScore = 0;
 
   if (locker.opening_hours === "24/7") featureScore += 40;
@@ -68,8 +71,7 @@ export function scoreLocker(
   if (locker.functions.some((f) => f.includes("allegro")))
     featureScore += 20;
 
-  // -----------------------------
-  // FINAL SCORE
-  // -----------------------------
+  // Final weighted score
+  // Distance has higher importance than features
   return distanceScore * 0.9 + featureScore * 0.1;
 }
