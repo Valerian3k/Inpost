@@ -1,6 +1,6 @@
 # InPost Parcel Locker Finder
 
-## English
+## English [EN]
 
 ### Overview
 This project is a full-stack application built as part of a technical assignment. Its purpose is to interact with the InPost Global Points API and provide a meaningful way to search, rank, and filter parcel lockers based on user location and preferences. The system is designed as a lightweight decision-support tool that helps users find the most relevant parcel locker instead of just the nearest one.
@@ -107,7 +107,7 @@ The project focuses on transforming a large geospatial dataset into a usable dec
 
 ---
 
-## Polski
+## Polski [PL]
 
 ### Opis projektu
 Projekt został stworzony jako odpowiedź na zadanie rekrutacyjne. Celem było wykorzystanie API InPost do budowy narzędzia pozwalającego wyszukiwać i oceniać paczkomaty na podstawie lokalizacji i filtrów użytkownika.
