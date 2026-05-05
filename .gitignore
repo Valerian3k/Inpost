@@ -1,0 +1,32 @@
+# =====================
+# FRONTEND
+# =====================
+inpost-front/node_modules/
+inpost-front/dist/
+inpost-front/.env
+inpost-front/.env.*
+
+# =====================
+# BACKEND
+# =====================
+inpost-back/node_modules/
+inpost-back/.env
+inpost-back/.env.*
+
+# =====================
+# GLOBAL
+# =====================
+node_modules/
+dist/
+build/
+
+# logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
