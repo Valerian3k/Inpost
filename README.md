@@ -56,7 +56,21 @@ Score is calculated using weighted logic:
 
 score = (distanceScore * 0.9) + (featureScore * 0.1)
 
-DistanceScore is normalized based on proximity, while featureScore rewards useful locker capabilities.
+DistanceScore is normalized based on relative proximity within the candidate set, while featureScore is computed as a weighted sum of selected capabilities (e.g. 24/7 availability, parcel sending, returns, Allegro support).
+
+---
+
+### Filtering Strategy and Edge Cases
+
+Filters are implemented as hard constraints and applied before the ranking phase to reduce the dataset size and improve performance.
+
+Additionally, the same constraints are enforced inside the scoring function (by returning `-Infinity`) to ensure consistency and prevent invalid results from being ranked in edge scenarios.
+
+The system handles sparse results using progressive radius expansion (15 → 30 → 60 → 100 km). If no lockers are found within smaller radii, the search area is gradually increased.
+
+An important edge case occurs when only a small number of lockers satisfy all filters and are located relatively far from the user. In such situations, the system prioritizes constraint satisfaction over proximity, meaning that a farther but fully compatible locker will be ranked above closer but incompatible ones.
+
+This reflects a deliberate design decision: filters define necessity, while scoring defines preference.
 
 ---
 
@@ -131,41 +145,138 @@ The project focuses on transforming a large geospatial dataset into a usable dec
 
 ## Polski [PL]
 
-### Opis projektu
-Projekt został stworzony jako odpowiedź na zadanie rekrutacyjne. Celem było wykorzystanie API InPost do budowy narzędzia pozwalającego wyszukiwać i oceniać paczkomaty na podstawie lokalizacji i filtrów użytkownika.
+### Dlaczego takie rozwiązanie
+
+Zdecydowałem się skupić na stworzeniu narzędzia wspierającego podejmowanie decyzji, zamiast prostego wyszukiwacza „najbliższego paczkomatu”. Zbiór danych InPost jest duży i bogaty w atrybuty, dlatego zwracanie listy opartej wyłącznie na odległości nie odpowiada realnym potrzebom użytkowników.
+
+W praktyce użytkownicy często zwracają uwagę na coś więcej niż dystans — np. dostępność 24/7, możliwość nadawania lub zwrotu przesyłek czy kompatybilność z przewoźnikiem (np. Allegro). Z tego powodu wprowadziłem system punktowy, który łączy odległość jako główny czynnik z dodatkowymi punktami za spełnianie określonych cech.
+
+Dodatkowo zaimplementowałem progresywne rozszerzanie promienia wyszukiwania oraz ograniczanie zbioru danych, aby zapewnić płynne działanie aplikacji nawet przy dużej liczbie punktów.
+
+---
+
+### Przegląd
+
+Projekt to aplikacja full-stack stworzona w ramach zadania technicznego. Jej celem jest integracja z API InPost Global Points oraz dostarczenie sensownego sposobu wyszukiwania, filtrowania i rankingowania paczkomatów na podstawie lokalizacji użytkownika i jego preferencji. System został zaprojektowany jako lekkie narzędzie wspomagające decyzje — zamiast wskazywać tylko najbliższy punkt, proponuje najbardziej dopasowany.
 
 ---
 
 ### Problem
-Dane InPost obejmują ponad 90 000 punktów o różnych funkcjach i dostępności. Celem było przekształcenie ich w czytelny system rankingowy.
+
+Surowy zbiór danych InPost zawiera ponad 90 000 punktów o różnych możliwościach, lokalizacjach i ograniczeniach operacyjnych. Wyzwanie nie polega na dostępności danych, lecz na ich użytecznym przetworzeniu. Projekt koncentruje się na przekształceniu danych geolokalizacyjnych w uporządkowaną, filtrowaną i interpretowalną listę paczkomatów.
 
 ---
 
-### Funkcje
-- wyszukiwanie paczkomatów po lokalizacji
-- ranking (odległość + funkcje)
-- filtry: 24/7, nadawanie, odbiór, Allegro
-- dynamiczny promień wyszukiwania 15–100 km
-- cache backendowy
-- limit 200 najbliższych punktów
+### Kluczowe funkcje
+
+- Wyszukiwanie paczkomatów na podstawie geolokalizacji  
+- System rankingowy łączący odległość (czynnik główny) i ocenę funkcji (czynnik pomocniczy)  
+- Filtry: dostępność 24/7, nadawanie przesyłek, zwroty, kompatybilność z Allegro  
+- Progresywne rozszerzanie promienia wyszukiwania: 15 km → 30 km → 45 km → 60 km → 100 km  
+- Komunikaty fallback w przypadku braku wyników w pobliżu  
+- Ograniczenie zbioru do 200 najbliższych punktów dla optymalizacji wydajności  
+- Buforowana warstwa backendowa dla efektywności API  
 
 ---
+
+### Architektura
+
+Frontend (React + TypeScript):
+- Obsługa interakcji użytkownika i geolokalizacji  
+- Filtrowanie i ranking danych  
+- Wyświetlanie najlepszego dopasowania oraz alternatyw  
+- Memoizacja dla poprawy wydajności  
+- Wstępne obliczanie odległości  
+
+Backend (Node.js + Express):
+- Pobieranie danych z API InPost  
+- Przechowywanie w pamięci (cache)  
+- Okresowe odświeżanie cache (co 1 godzinę)  
+- Endpoint `/api/points`  
+- Równoległe pobieranie danych dla lepszej wydajności  
+
+---
+
+### Algorytm punktacji
+
+Wynik obliczany jest według następującego wzoru:
+
+score = (distanceScore * 0.9) + (featureScore * 0.1)
+
+distanceScore jest normalizowany na podstawie względnej odległości w zbiorze kandydatów, natomiast featureScore to suma ważona wybranych cech (np. dostępność 24/7, nadawanie, zwroty, obsługa Allegro).
+
+---
+
+### Strategia filtrowania i przypadki brzegowe
+
+Filtry są traktowane jako twarde ograniczenia i stosowane przed etapem rankingowania, co zmniejsza zbiór danych i poprawia wydajność.
+
+Dodatkowo te same warunki są egzekwowane w funkcji scoringowej (poprzez zwracanie `-Infinity`), aby zapewnić spójność i uniknąć błędów w sytuacjach brzegowych.
+
+System radzi sobie z małą liczbą wyników poprzez progresywne zwiększanie promienia wyszukiwania (15 → 30 → 60 → 100 km). Jeśli w mniejszych zakresach nie zostaną znalezione paczkomaty, obszar wyszukiwania jest stopniowo rozszerzany.
+
+Istotnym przypadkiem brzegowym jest sytuacja, gdy tylko niewielka liczba paczkomatów spełnia wszystkie filtry i znajdują się one daleko od użytkownika. W takim przypadku system priorytetyzuje spełnienie wymagań nad odległością — dalszy, ale zgodny punkt zostanie oceniony wyżej niż bliższy, który nie spełnia kryteriów.
+
+Jest to świadoma decyzja projektowa: filtry definiują konieczność, a scoring określa preferencje.
+
+---
+
+### Optymalizacje wydajności
+
+- Ograniczenie danych do 200 najbliższych punktów przed scoringiem  
+- Wstępne obliczanie odległości  
+- Filtrowanie przed rankingiem  
+- Cache po stronie backendu w celu ograniczenia liczby zapytań do API  
+
+---
+
+### Kompromisy
+
+- Cache w pamięci zamiast bazy danych (prostota kosztem skalowalności)  
+- Brak warstwy persystencji  
+- Przeliczanie wyników przy zmianie filtrów zamiast aktualizacji inkrementalnej  
+- Priorytet czytelności nad nadmierną optymalizacją  
+
+---
+
+### Założenia
+
+- API InPost jest stabilne i dostępne  
+- Lokalizacja użytkownika jest dostępna  
+- Zbiór danych mieści się w pamięci  
+
+---
+
+### Jak uruchomić
 
 ### Backend
-- pobiera dane z InPost API
-- trzyma cache w pamięci
-- odświeża co godzinę
-- endpoint `/api/points`
+cd inpost-backend
+npm install
+node server.js
+
+### Frontend
+cd inpost-frontend
+npm install
+npm run dev
+
+Backend działa na:
+http://localhost:3001
+
+Frontend działa na:
+http://localhost:5173
 
 ---
 
-### Frontend
-- pobiera lokalizację użytkownika
-- liczy dystans (Haversine)
-- sortuje i filtruje dane
-- pokazuje najlepszy wynik i alternatywy
+### Możliwe usprawnienia
+
+- Zastąpienie cache w pamięci przez Redis lub bazę danych  
+- Integracja z mapami (Google Maps / Leaflet)  
+- Aktualizacje dostępności w czasie rzeczywistym  
+- Paginacja po stronie backendu  
+- Testy dla logiki scoringowej  
 
 ---
 
 ### Podsumowanie
-Projekt skupia się na wydajnym przetwarzaniu danych geolokalizacyjnych i budowie prostego systemu decyzyjnego z naciskiem na jakość, czytelność i świadome kompromisy architektoniczne.
+
+Projekt koncentruje się na przekształceniu dużego zbioru danych geolokalizacyjnych w użyteczne narzędzie wspierające decyzje, z naciskiem na wydajność, logikę rankingową oraz przejrzystą architekturę.
