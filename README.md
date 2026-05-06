@@ -2,6 +2,16 @@
 
 ## English [EN]
 
+### Why this solution
+
+I chose to focus on building a decision-support tool rather than a simple “nearest locker” finder. The InPost dataset is large and rich in attributes, so returning a raw proximity-based list does not reflect real user needs.
+
+In practice, users often care about more than distance such as 24/7 availability, ability to send or return parcels, or carrier compatibility (e.g. Allegro). For this reason, I introduced a scoring system that combines distance as the primary factor with feature-based bonuses.
+
+Additionally, I implemented progressive radius expansion and dataset limiting to ensure the application remains responsive even with a large number of points.
+
+---
+
 ### Overview
 This project is a full-stack application built as part of a technical assignment. Its purpose is to interact with the InPost Global Points API and provide a meaningful way to search, rank, and filter parcel lockers based on user location and preferences. The system is designed as a lightweight decision-support tool that helps users find the most relevant parcel locker instead of just the nearest one.
 
@@ -78,14 +88,22 @@ DistanceScore is normalized based on proximity, while featureScore rewards usefu
 ### Backend
 ```bash
 cd inpost-backend
+```
+```bash
 npm install
+```
+```bash
 node server.js
 ```
 
 ### Frontend
 ```bash
 cd inpost-frontend
+```
+```bash
 npm install
+```
+```bash
 npm run dev
 ```
 
