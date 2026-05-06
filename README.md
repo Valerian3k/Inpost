@@ -58,6 +58,16 @@ The goal is to integrate with the InPost Global Points API and provide a meaning
 
 ---
 
+## Screenshots
+
+### Main view
+![Main view](./screens/main.png)
+
+### Filters applied
+![Filters applied](./screens/filters.png)
+
+---
+
 ## Problem
 
 The raw InPost dataset contains over 90,000 points with different capabilities, locations, and operational constraints. The challenge is not data availability, but its meaningful processing. The project focuses on transforming geolocation data into a structured, filtered, and interpretable list of parcel lockers.
@@ -222,6 +232,16 @@ Dodatkowo zaimplementowałem progresywne rozszerzanie promienia wyszukiwania ora
 ### Przegląd
 
 Celem jest integracja z API InPost Global Points oraz dostarczenie sensownego sposobu wyszukiwania, filtrowania i rankingowania paczkomatów na podstawie lokalizacji użytkownika i jego preferencji. System został zaprojektowany jako lekkie narzędzie wspomagające decyzje, zamiast wskazywać tylko najbliższy punkt, proponuje najbardziej dopasowany.
+
+---
+
+## Zrzuty ekranu
+
+### Widok główny
+![Widok główny](./screens/main.png)
+
+### Zastosowane filtry
+![Zastosowane filtry](./screens/filters.png)
 
 ---
 <a id="problem-pl"></a>
