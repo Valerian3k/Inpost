@@ -6,6 +6,7 @@
 
 - [Why this solution](#why-this-solution)
 - [Overview](#overview)
+- [Screenshots](#screenshots)
 - [Problem](#problem)
 - [Key features](#key-features)
 - [Architecture](#architecture)
@@ -23,6 +24,7 @@
 
 - [Dlaczego takie rozwiązanie](#dlaczego-takie-rozwiązanie)
 - [Przegląd](#przegląd)
+- [Zrzuty ekranu](#zrzuty-ekranu)
 - [Problem](#problem-pl)
 - [Kluczowe funkcje](#kluczowe-funkcje)
 - [Architektura](#architektura)
@@ -60,11 +62,12 @@ The goal is to integrate with the InPost Global Points API and provide a meaning
 
 ## Screenshots
 
-### Main view
-![Main view](./screens/main.png)
+### Application preview (Kraków, Poland)
 
-### Filters applied
-![Filters applied](./screens/filters.png)
+<div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
+  <img src="./screens/main.png" style="width: 24%; object-fit: cover;" />
+  <img src="./screens/filters.png" style="width: 24%; object-fit: cover;" />
+</div>
 
 ---
 
@@ -237,11 +240,12 @@ Celem jest integracja z API InPost Global Points oraz dostarczenie sensownego sp
 
 ## Zrzuty ekranu
 
-### Widok główny
-![Widok główny](./screens/main.png)
+### Podgląd aplikacji (Kraków, Polska)
 
-### Zastosowane filtry
-![Zastosowane filtry](./screens/filters.png)
+<div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
+  <img src="./screens/main.png" style="width: 24%; object-fit: cover;" />
+  <img src="./screens/filters.png" style="width: 24%; object-fit: cover;" />
+</div>
 
 ---
 <a id="problem-pl"></a>
