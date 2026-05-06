@@ -1,7 +1,5 @@
 # InPost Parcel Locker Finder
 
-# InPost Decision Support System
-
 ---
 
 # Table of Contents (EN)
@@ -19,29 +17,23 @@
 - [Performance optimizations](#performance-optimizations)
 - [Assumptions](#assumptions)
 - [Run project](#run-project)
-  - [Backend](#backend)
-  - [Frontend](#frontend)
 - [Summary](#summary)
-
----
 
 # Spis treści (PL)
 
-- [Dlaczego takie rozwiązanie](#dlaczego-takie-rozwiazanie)
-- [Przegląd](#przeglad)
-- [Problem](#problem)
+- [Dlaczego takie rozwiązanie](#dlaczego-takie-rozwiązanie)
+- [Przegląd](#przegląd)
+- [Problem](#problem-pl)
 - [Kluczowe funkcje](#kluczowe-funkcje)
 - [Architektura](#architektura)
-  - [Backend (Node.js + Express)](#backend-nodejs--express)
-  - [Frontend (React + TypeScript)](#frontend-react--typescript)
-  - [Przepływ danych](#przeplyw-danych)
+  - [Backend (Node.js + Express)](#backend-nodejs--express-pl)
+  - [Frontend (React + TypeScript)](#frontend-react--typescript-pl)
+  - [Przepływ danych](#przepływ-danych)
 - [Algorytm punktacji](#algorytm-punktacji)
 - [Strategia filtrowania i przypadki brzegowe](#strategia-filtrowania-i-przypadki-brzegowe)
-- [Optymalizacje wydajności](#optymalizacje-wydajnosci)
-- [Założenia](#zalozenia)
-- [Jak uruchomić](#jak-uruchomic)
-  - [Backend](#backend)
-  - [Frontend](#frontend)
+- [Optymalizacje wydajności](#optymalizacje-wydajności)
+- [Założenia](#założenia)
+- [Jak uruchomić](#jak-uruchomić)
 - [Podsumowanie](#podsumowanie)
 
 ---
@@ -191,6 +183,8 @@ npm install
 node server.js
 ```
 
+On startup, the backend takes approximately 1–2 minutes to initialize because it fetches and caches data from the InPost API. The server will start normally, but will only be fully ready after the initial data load is completed.
+
 ### Frontend
 ```bash
 cd inpost-frontend
@@ -230,7 +224,7 @@ Dodatkowo zaimplementowałem progresywne rozszerzanie promienia wyszukiwania ora
 Celem jest integracja z API InPost Global Points oraz dostarczenie sensownego sposobu wyszukiwania, filtrowania i rankingowania paczkomatów na podstawie lokalizacji użytkownika i jego preferencji. System został zaprojektowany jako lekkie narzędzie wspomagające decyzje, zamiast wskazywać tylko najbliższy punkt, proponuje najbardziej dopasowany.
 
 ---
-
+<a id="problem-pl"></a>
 ### Problem
 
 Surowy zbiór danych InPost zawiera ponad 90 000 punktów o różnych możliwościach, lokalizacjach i ograniczeniach operacyjnych. Wyzwanie nie polega na dostępności danych, lecz na ich użytecznym przetworzeniu. Projekt koncentruje się na przekształceniu danych geolokalizacyjnych w uporządkowaną, filtrowaną i interpretowalną listę paczkomatów.
@@ -253,6 +247,7 @@ Surowy zbiór danych InPost zawiera ponad 90 000 punktów o różnych możliwoś
 
 System został zaprojektowany jako lekka aplikacja typu decision-support, w której frontend odpowiada za większość logiki przetwarzania danych, a backend pełni rolę warstwy pośredniej do komunikacji z zewnętrznym API.
 
+<a id="backend-nodejs--express-pl"></a>
 #### Backend (Node.js + Express)
 Backend działa jako cienka warstwa integracyjna pomiędzy aplikacją a API InPost.
 
@@ -264,6 +259,7 @@ Backend działa jako cienka warstwa integracyjna pomiędzy aplikacją a API InPo
 
 To podejście zostało wybrane ze względu na ograniczenia zewnętrznego API oraz potrzebę utrzymania backendu w możliwie lekkiej formie.
 
+<a id="frontend-react--typescript-pl"></a>
 #### Frontend (React + TypeScript)
 
 Frontend odpowiada za całą logikę przetwarzania i prezentacji danych.
@@ -358,6 +354,8 @@ npm install
 ```bash
 node server.js
 ```
+
+Przy uruchomieniu backend potrzebuje około 1–2 minut, aby pobrać i zbuforować dane z API InPost. Serwer startuje normalnie, ale będzie w pełni gotowy dopiero po zakończeniu ładowania danych.
 
 ### Frontend
 ```bash
