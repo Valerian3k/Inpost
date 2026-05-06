@@ -75,15 +75,19 @@ DistanceScore is normalized based on proximity, while featureScore rewards usefu
 
 ### How to Run
 
-Backend:
+### Backend
+```bash
 cd inpost-backend
 npm install
 node server.js
+```
 
-Frontend:
+### Frontend
+```bash
 cd inpost-frontend
 npm install
 npm run dev
+```
 
 Backend runs on:
 http://localhost:3001
