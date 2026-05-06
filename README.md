@@ -62,11 +62,11 @@ The goal is to integrate with the InPost Global Points API and provide a meaning
 
 ## Screenshots
 
-### Application preview (Kraków, Poland)
+### Application preview (Location: Kraków, Poland)
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
-  <img src="./screens/main.png" style="width: 24%; object-fit: cover;" />
-  <img src="./screens/filters.png" style="width: 24%; object-fit: cover;" />
+<div style="display: flex; justify-content: center;">
+  <img src="./screens/main.png" style="width: 48%;" />
+  <img src="./screens/filters.png" style="width: 48%;" />
 </div>
 
 ---
@@ -240,11 +240,11 @@ Celem jest integracja z API InPost Global Points oraz dostarczenie sensownego sp
 
 ## Zrzuty ekranu
 
-### Podgląd aplikacji (Kraków, Polska)
+### Podgląd aplikacji (Dla lokalizacji: Kraków, Polska)
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
-  <img src="./screens/main.png" style="width: 24%; object-fit: cover;" />
-  <img src="./screens/filters.png" style="width: 24%; object-fit: cover;" />
+<div style="display: flex; justify-content: center;">
+  <img src="./screens/main.png" style="width: 48%;" />
+  <img src="./screens/filters.png" style="width: 48%;" />
 </div>
 
 ---
